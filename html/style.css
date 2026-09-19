@@ -1,0 +1,36 @@
+/* LXR-LOADING — the loading screen on top of lxr-ui.css. No colours here: every value is a kit token. */
+html, body { margin: 0; height: 100%; overflow: hidden; }
+.lxr body, .lxr { background: var(--lxr-void); }
+.ld { position: fixed; inset: 0; display: flex; flex-direction: column; color: var(--lxr-bone); font-family: var(--lxr-font-plain); background: var(--lxr-void); overflow: hidden; }
+
+/* ── atmosphere: two slow embers of the blood accent, film grain, the wolf as a watermark ── */
+.ld-ember { position: absolute; width: 60vw; height: 60vw; border-radius: 50%; filter: blur(120px); opacity: .22; background: var(--lxr-blood); pointer-events: none; }
+.ld-ember--a { right: -20vw; top: -10vw; animation: ld-drift-a 28s ease-in-out infinite alternate; }
+.ld-ember--b { left: -25vw; bottom: -30vw; width: 50vw; height: 50vw; opacity: .12; animation: ld-drift-b 34s ease-in-out infinite alternate; }
+@keyframes ld-drift-a { from { transform: translate(0, 0) scale(1); } to { transform: translate(-8vw, 6vw) scale(1.15); } }
+@keyframes ld-drift-b { from { transform: translate(0, 0) scale(1); } to { transform: translate(10vw, -8vw) scale(1.1); } }
+.ld-grain { position: absolute; inset: 0; pointer-events: none; opacity: .06; mix-blend-mode: overlay;
+  background-image: repeating-linear-gradient(0deg, var(--lxr-bone) 0 1px, transparent 1px 3px), repeating-linear-gradient(90deg, var(--lxr-bone) 0 1px, transparent 1px 2px); }
+.ld-wolf { position: absolute; right: 6vw; top: 50%; width: 42vh; height: 42vh; transform: translateY(-50%); object-fit: contain; opacity: .18; filter: drop-shadow(0 0 60px var(--lxr-blood-18)); animation: ld-breathe 9s ease-in-out infinite; pointer-events: none; }
+@keyframes ld-breathe { 0%, 100% { opacity: .16; } 50% { opacity: .30; } }
+
+/* ── chrome ── */
+.ld-top { display: flex; align-items: center; gap: var(--lxr-s3); padding: 36px 56px 0; font-size: var(--lxr-text-micro); position: relative; }
+.ld-logo { width: 40px; height: 40px; object-fit: contain; background: var(--lxr-panel-solid); border: var(--lxr-hairline) solid var(--lxr-edge); border-radius: var(--lxr-radius); padding: 4px; }
+.ld-body { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 0 56px; max-width: 58vw; position: relative; }
+.ld-title { margin: 0; font-size: clamp(56px, 8vw, 132px); line-height: .92; color: var(--lxr-bone); letter-spacing: -.01em; }
+.ld-tagline { margin: var(--lxr-s4) 0 0; font-family: var(--lxr-font-cut); font-size: clamp(18px, 1.6vw, 26px); color: var(--lxr-ash); }
+.ld-line { margin: var(--lxr-s7) 0 0; padding-left: var(--lxr-s4); border-left: 1px solid var(--lxr-blood-lit); max-width: 620px; font-size: var(--lxr-text-lg); line-height: 1.6; color: var(--lxr-bone); min-height: 3.2em; transition: opacity var(--lxr-slow) var(--lxr-ease); }
+.ld-line.is-swap { opacity: 0; }
+
+.ld-foot { padding: 0 56px 40px; display: flex; flex-direction: column; gap: var(--lxr-s2); position: relative; }
+.ld-row { display: flex; align-items: baseline; gap: var(--lxr-s3); font-size: var(--lxr-text-micro); }
+#percent { font-size: var(--lxr-text-lg); }
+.ld-meter { height: 3px; background: var(--lxr-edge); }
+.ld-meter .lxr-meter-fill { height: 100%; background: var(--lxr-blood-lit); transition: width .45s var(--lxr-ease); }
+.ld.is-ready .lxr-meter-fill { background: var(--lxr-bone); }
+.ld.is-out { animation: ld-out .9s var(--lxr-ease) forwards; }
+@keyframes ld-out { to { opacity: 0; } }
+
+.lxr.lang-ka .ld-title, .lxr.lang-ka .ld-tagline { font-family: var(--lxr-font-ka); text-transform: none; letter-spacing: 0; }
+.lxr.lang-ka .ld-title { font-size: clamp(44px, 6vw, 96px); }
