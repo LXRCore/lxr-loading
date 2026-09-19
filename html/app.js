@@ -24,6 +24,31 @@
     el.classList.add('is-swap');
     setTimeout(() => { el.textContent = lines[lineAt % lines.length]; lineAt++; el.classList.remove('is-swap'); }, 450);
   }
+  // The client script (and its brand / locale message) only runs once the game has loaded — the whole load bar
+  // would pass with an empty line. So the page reads the resource's own config and locale at its first frame:
+  // one source of truth (locales/*.lua), parsed here with a regex; the brand message later replaces it.
+  async function bootLocale() {
+    try {
+      const cfg = await fetch('../config.lua').then((r) => r.text());
+      const lang = (cfg.match(/Config\.Lang\s*=\s*'([a-z]{2})'/) || [])[1] || 'en';
+      const pace = (cfg.match(/everySeconds\s*=\s*(\d+)/) || [])[1]; if (pace) every = Number(pace) * 1000;
+      const lua = await fetch('../locales/' + lang + '.lua').then((r) => r.text());
+      const out = {};
+      let section = '';
+      for (const raw of lua.split('\n')) {
+        const line = raw.replace(/--.*$/, '');
+        const sec = line.match(/^\s*([a-z_]+)\s*=\s*\{/); if (sec) { section = sec[1]; continue; }
+        const kv = line.match(/^\s*([a-z_0-9]+)\s*=\s*'((?:[^'\\]|\\.)*)'/);
+        if (kv && section) out[section + '.' + kv[1]] = kv[2].replace(/\\'/g, "'");
+      }
+      if (Object.keys(out).length && !Object.keys(L).length) {
+        L = out; document.body.classList.toggle('lang-ka', lang === 'ka');
+        $('kicker').textContent = t('ui.kicker'); $('hint').textContent = t('ui.hint');
+        startLines();
+      }
+    } catch (e) { /* no page-side locale: the brand message brings it */ }
+  }
+  bootLocale();
   function startLines() {
     clearInterval(lineTimer);
     lines = Object.keys(L).filter((k) => k.startsWith('lines.')).sort().map((k) => L[k]);

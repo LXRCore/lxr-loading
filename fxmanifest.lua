@@ -43,6 +43,8 @@ loadscreen_manual_shutdown 'yes'
 loadscreen_cursor 'no'
 
 files {
+    'config.lua',        -- the page reads Config.Lang and the lines' pace at its first frame
+    'locales/*.lua',     -- and the lines themselves, before any script runs
     'html/index.html',
     'html/lxr-ui.css',
     'html/style.css',
